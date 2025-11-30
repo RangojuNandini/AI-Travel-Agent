@@ -1,0 +1,169 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "AI Travel Agent",
+        "formDescription": "We are building a Travel agent for travellers..",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Enter destination",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Enter number of People",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Enter Budget($)",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Enter number of Days",
+              "fieldType": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1d4b52ce-05a0-4c25-85b3-b0f9a622b6f2",
+      "name": "On form submission",
+      "webhookId": "507b8854-a001-4736-b713-30602160e6ca"
+    },
+    {
+      "parameters": {
+        "jsCode": "const form = items[0].json;\n\nconst destination = form[\"Enter destination\"];\nconst people = form[\"Enter number of People\"];\nconst budget = form[\"Enter Budget ($)\"];\nconst days = form[\"Enter number of Days\"];\n\nconst prompt = `Create a travel plan for a trip to ${destination} for ${people} people, with a budget of $${budget} over ${days} days. Include:\n\n1. Transport options (flights, local transport)\n2. Hotel suggestions within budget\n3. Daily itinerary\n4. Local experiences (cultural, culinary, nature)\n5. Best travel practices and safety tips\n\nMake the output structured and helpful.\n`;\n\nreturn [\n  {\n    json: {\n      chatInput: prompt + \"make sure send in a plain text no markdown\"  // or chatInput if that's what LLM expects\n    }\n  }\n];6"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "235a3e64-f33e-45ad-bd13-952f12f55a74",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        440,
+        0
+      ],
+      "id": "e6394bcb-9fab-451d-873a-23a364b55fbc",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        460,
+        180
+      ],
+      "id": "d56f2e22-a552-4745-bbd8-cfbb5f7cd3ac",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "4e4pNZPGGc0KWkdB",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "nandinirangoju@gmail.com",
+        "toEmail": "nandinir2324@gmail.com",
+        "subject": "Hey! There you go with your travel plan.",
+        "emailFormat": "text",
+        "text": "={{$json[\"text\"]}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        800,
+        0
+      ],
+      "id": "3c871181-b4e7-4b54-881c-c50ec77b9071",
+      "name": "Send email",
+      "webhookId": "acd9f07a-b444-425e-a2fc-e19d7f8b24d4",
+      "credentials": {
+        "smtp": {
+          "id": "ZlVOcOHRdCPnc9YE",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "44b039eb-c58a-4504-abcd-1f4d4aa48ad6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c36e9ab0f90834cebffeaf2b3c5b8f771328d3a8a5031026ec7c760681d13695"
+  },
+  "id": "lvf8VjX66SScThwt",
+  "tags": []
+}
