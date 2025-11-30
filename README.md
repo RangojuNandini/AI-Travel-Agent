@@ -75,11 +75,17 @@ ___✨ Features___
 
 ___🛠 Tech Stack___
 -Component	Technology
--Workflow Automation	n8n
--AI Model	Google Gemini
--Email Service	SMTP / Gmail
--Custom Logic	JavaScript
--Input Handling	n8n Form Trigger
+
+
+| Component          | Technology         |
+|-------------------|------------------|
+| Workflow Automation| n8n               |
+| AI Model           | Google Gemini     |
+| Email Service      | SMTP / Gmail      |
+| Custom Logic       | JavaScript        |
+| Input Handling     | n8n Form Trigger  |
+
+
 
 __📸 Demo__
 
