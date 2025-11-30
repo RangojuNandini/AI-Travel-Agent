@@ -8,7 +8,7 @@ AI Travel Agent is an intelligent workflow that automatically creates customized
 It collects destination details through a form, processes the data using an LLM (Google Gemini), and sends a structured travel itinerary to the user’s email in seconds.
 
 
-This project demonstrates:
+__This project demonstrates:__
 
 -AI integration
 
